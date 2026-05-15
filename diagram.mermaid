@@ -1,0 +1,27 @@
+graph TD
+    User((Pengguna / CLI)) <-->|Input/Output Interaktif| Agent[Travel AI Agent app.py]
+    
+    subgraph Google Cloud
+        LLM[Google GenAI: Gemini 3 Flash]
+    end
+    
+    subgraph Local Server Environment
+        Agent <-->|1. Mengirim Prompt & Skema Tools <br> 4. Mengirim Hasil Eksekusi Tool| LLM
+        LLM -.->|2. Meminta Eksekusi Fungsi <br> 5. Mengembalikan Respon Natural| Agent
+        
+        Agent <-->|3. Menjalankan Fungsi| MCP[FastMCP Tools]
+        
+        subgraph Database Layer
+            MCP -->|SELECT: search_hotels| DB[(SQLite: travel.db)]
+            MCP -->|UPDATE: book_hotel| DB
+        end
+    end
+
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px;
+    classDef cloud fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
+    classDef local fill:#e8f5e9,stroke:#388e3c,stroke-width:2px;
+    classDef db fill:#fff3e0,stroke:#f57c00,stroke-width:2px;
+    
+    class LLM cloud;
+    class Agent,MCP local;
+    class DB db;
